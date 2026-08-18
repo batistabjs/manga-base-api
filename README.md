@@ -4,7 +4,7 @@ API RESTful para cadastro e gerenciamento de Mangás, Manhwas e Gibis.
 
 ## Tecnologias Utilizadas
 
-- **PHP 7.4+** - Linguagem de programação
+- **PHP 8.2+** - Linguagem de programação
 - **MySQL/MariaDB** - Banco de dados relacional
 - **Apache/Nginx** - Servidor web
 - **JWT (JSON Web Tokens)** - Autenticação
@@ -95,12 +95,20 @@ private $password = '';
 
 ### 3. Configurar servidor web
 
-Certifique-se de que `mod_rewrite` está habilitado no Apache.
+No terminal, certifique-se de que o php esteja instalado na máquina com o comando: 
+```
+php -v
+```
+
+Ainda no terminal, vá até a pasta do projeto e execute o comando:
+```
+php -S localhost:8080   
+```
 
 ### 4. Testar a API
 
 ```
-http://localhost/manga-base-api/
+http://localhost:8080
 ```
 
 ## Endpoints da API
@@ -154,7 +162,7 @@ Para o endpoint `GET /api/v1/mangas`:
 ### Login
 
 ```bash
-curl -X POST http://localhost/manga-base-api/api/v1/auth/login \
+curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@mangabase.com",
@@ -179,7 +187,7 @@ Resposta (200 OK):
 ### Cadastrar Usuário
 
 ```bash
-curl -X POST http://localhost/manga-base-api/api/v1/auth/cadastro \
+curl -X POST http://localhost:8080/api/v1/auth/cadastro \
   -H "Content-Type: application/json" \
   -d '{
     "nome": "Novo Usuário",
@@ -193,22 +201,22 @@ curl -X POST http://localhost/manga-base-api/api/v1/auth/cadastro \
 
 ```bash
 # Listar todos
-curl "http://localhost/manga-base-api/api/v1/mangas"
+curl "http://localhost:8080/api/v1/mangas"
 
 # Filtrar por tipo
-curl "http://localhost/manga-base-api/api/v1/mangas?tipo=manhwa"
+curl "http://localhost:8080/api/v1/mangas?tipo=manhwa"
 
 # Buscar por título
-curl "http://localhost/manga-base-api/api/v1/mangas?busca=one+piece"
+curl "http://localhost:8080/api/v1/mangas?busca=one+piece"
 
 # Paginação
-curl "http://localhost/manga-base-api/api/v1/mangas?pagina=2&tamanho_pagina=5"
+curl "http://localhost:8080/api/v1/mangas?pagina=2&tamanho_pagina=5"
 ```
 
 ### Criar Mangá (Autenticado)
 
 ```bash
-curl -X POST http://localhost/manga-base-api/api/v1/mangas \
+curl -X POST http://localhost:8080/api/v1/mangas \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN" \
   -d '{
@@ -229,7 +237,7 @@ curl -X POST http://localhost/manga-base-api/api/v1/mangas \
 ### Criar Manhwa (Autenticado)
 
 ```bash
-curl -X POST http://localhost/manga-base-api/api/v1/mangas \
+curl -X POST http://localhost:8080/api/v1/mangas \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN" \
   -d '{
@@ -244,7 +252,7 @@ curl -X POST http://localhost/manga-base-api/api/v1/mangas \
 ### Criar Gibi (Autenticado)
 
 ```bash
-curl -X POST http://localhost/manga-base-api/api/v1/mangas \
+curl -X POST http://localhost:8080/api/v1/mangas \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN" \
   -d '{
@@ -259,7 +267,7 @@ curl -X POST http://localhost/manga-base-api/api/v1/mangas \
 ### Atualizar Mangá (Autenticado)
 
 ```bash
-curl -X PUT http://localhost/manga-base-api/api/v1/mangas/1 \
+curl -X PUT http://localhost:8080/api/v1/mangas/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN" \
   -d '{
@@ -271,7 +279,7 @@ curl -X PUT http://localhost/manga-base-api/api/v1/mangas/1 \
 ### Deletar Mangá (Autenticado)
 
 ```bash
-curl -X DELETE http://localhost/manga-base-api/api/v1/mangas/1 \
+curl -X DELETE http://localhost:8080/api/v1/mangas/1 \
   -H "Authorization: Bearer SEU_TOKEN"
 ```
 
