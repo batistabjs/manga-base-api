@@ -1,0 +1,24 @@
+# Arquivos de configuração
+config/database.php
+.env
+
+# Dependências
+/vendor/
+composer.lock
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Arquivos temporários
+tmp/
+temp/
