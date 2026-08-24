@@ -1,9 +1,0 @@
-FROM mysql:8.0
-
-ENV MYSQL_ROOT_PASSWORD=secret
-ENV MYSQL_DATABASE=manga_base_db
-
-COPY ../sql/schema.sql /docker-entrypoint-initdb.d/01-schema.sql
-COPY ../sql/seed.sql /docker-entrypoint-initdb.d/02-seed.sql
-
-EXPOSE 3306

@@ -1,8 +1,8 @@
 services:
   app:
     build:
-      context: ../
-      dockerfile: docker/dockerfile-app
+      context: .
+      dockerfile: dockerfile-app
     container_name: manga-base-api
     ports:
       - "8080:8080"
@@ -20,8 +20,8 @@ services:
 
   db:
     build:
-      context: ../
-      dockerfile: docker/dockerfile-banco
+      context: .
+      dockerfile: dockerfile-banco
     container_name: manga-db
     ports:
       - "3306:3306"
