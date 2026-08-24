@@ -1,9 +1,8 @@
-
 services:
   app:
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/dockerfile-app
     container_name: manga-base-api
     ports:
       - "8080:8080"
@@ -20,16 +19,13 @@ services:
       - manga-network
 
   db:
-    image: mysql:8.0
+    build:
+      context: ../
+      dockerfile: docker/dockerfile-banco
     container_name: manga-db
     ports:
       - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=manga_base_db
     volumes:
-      - ../sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ../sql/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
       - db-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
