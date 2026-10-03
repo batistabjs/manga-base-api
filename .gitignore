@@ -1,9 +1,10 @@
 # Arquivos de configuração
+config/database.php
 .env
-.mimocode/
 
 # Dependências
-node_modules/
+/vendor/
+composer.lock
 
 # Arquivos do sistema
 .DS_Store
