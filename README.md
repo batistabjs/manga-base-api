@@ -4,35 +4,22 @@ API RESTful para cadastro e gerenciamento de Mangás, Manhwas e Gibis.
 
 ## Tecnologias Utilizadas
 
-- **PHP 8.2+** - Linguagem de programação
-- **MySQL/MariaDB** - Banco de dados relacional
-- **Apache/Nginx** - Servidor web
+- **Node.js** - Runtime JavaScript
+- **JSON** - Armazenamento de dados em arquivos
 - **JWT (JSON Web Tokens)** - Autenticação
 
 ## Estrutura do Projeto
 
 ```
 manga-base-api/
-├── config/
-│   └── Database.php        # Conexão com banco de dados
-├── controllers/
-│   ├── AuthController.php   # Controller de autenticação
-│   └── MangaController.php  # Controller dos mangás
-├── helpers/
-│   ├── JWT.php              # Autenticação JWT
-│   └── Response.php         # Respostas HTTP
-├── middleware/
-│   └── Auth.php             # Verificação de autenticação
-├── models/
-│   ├── Manga.php            # Model dos mangás
-│   └── Usuario.php          # Model dos usuários
-├── sql/
-│   ├── schema.sql           # Estrutura do banco
-│   └── seed.sql             # Dados iniciais
-├── .htaccess                # URL rewriting
-├── index.php                # Ponto de entrada
-├── Router.php               # Router da API
-└── README.md                # Este arquivo
+├── dados/
+│   ├── mangas.json            # Dados dos mangás
+│   └── usuarios.json          # Dados dos usuários
+├── dados.js                   # Módulo de acesso aos dados
+├── jwt.js                     # Autenticação JWT
+├── package.json               # Dependências do projeto
+├── server.js                  # Ponto de entrada / servidor
+└── README.md                  # Este arquivo
 ```
 
 ## Autenticação
@@ -72,43 +59,45 @@ Authorization: Bearer SEU_TOKEN_AQUI
 | **manhwa** | Histórias em quadrinhos coreanas |
 | **gibi** | Histórias em quadrinhos brasileiras |
 
+## Status Suportados
+
+| Status | Descrição |
+|--------|-----------|
+| **em_andamento** | Publicação em andamento |
+| **completo** | Obra finalizada |
+| **hiatus** | Pausa temporária |
+| **cancelado** | Obra cancelada |
+
 ## Instalação
 
-### 1. Configurar o banco de dados
+### 1. Instalar Node.js
+
+Certifique-se de que o Node.js esteja instalado:
+```
+node -v
+```
+
+### 2. Instalar dependências
 
 ```bash
-mysql -u root -p < sql/schema.sql
-mysql -u root -p < sql/seed.sql
+npm install
 ```
 
-### 2. Editar credenciais
+### 3. Iniciar o servidor
 
-Edite `config/Database.php` com suas credenciais:
-
-```php
-private $host = 'localhost';
-private $port = 3306;
-private $dbname = 'manga_base_db';
-private $username = 'root';
-private $password = '';
+```bash
+npm start
 ```
 
-### 3. Configurar servidor web
-
-No terminal, certifique-se de que o php esteja instalado na máquina com o comando: 
-```
-php -v
-```
-
-Ainda no terminal, vá até a pasta do projeto e execute o comando:
-```
-php -S localhost:8080   
+Ou para desenvolvimento com auto-reload:
+```bash
+npm run dev
 ```
 
 ### 4. Testar a API
 
 ```
-http://localhost:8080
+http://localhost:8081
 ```
 
 ## Endpoints da API
@@ -162,7 +151,7 @@ Para o endpoint `GET /api/v1/mangas`:
 ### Login
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/auth/login \
+curl -X POST http://localhost:8081/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@mangabase.com",
@@ -184,39 +173,26 @@ Resposta (200 OK):
 }
 ```
 
-### Cadastrar Usuário
-
-```bash
-curl -X POST http://localhost:8080/api/v1/auth/cadastro \
-  -H "Content-Type: application/json" \
-  -d '{
-    "nome": "Novo Usuário",
-    "email": "novo@email.com",
-    "nome_usuario": "novo_usuario",
-    "senha": "123456"
-  }'
-```
-
 ### Listar Mangás (Público - Sem Token)
 
 ```bash
 # Listar todos
-curl "http://localhost:8080/api/v1/mangas"
+curl "http://localhost:8081/api/v1/mangas"
 
 # Filtrar por tipo
-curl "http://localhost:8080/api/v1/mangas?tipo=manhwa"
+curl "http://localhost:8081/api/v1/mangas?tipo=manhwa"
 
 # Buscar por título
-curl "http://localhost:8080/api/v1/mangas?busca=one+piece"
+curl "http://localhost:8081/api/v1/mangas?busca=one+piece"
 
 # Paginação
-curl "http://localhost:8080/api/v1/mangas?pagina=2&tamanho_pagina=5"
+curl "http://localhost:8081/api/v1/mangas?pagina=2&tamanho_pagina=5"
 ```
 
 ### Criar Mangá (Autenticado)
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/mangas \
+curl -X POST http://localhost:8081/api/v1/mangas \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN" \
   -d '{
@@ -234,40 +210,10 @@ curl -X POST http://localhost:8080/api/v1/mangas \
   }'
 ```
 
-### Criar Manhwa (Autenticado)
-
-```bash
-curl -X POST http://localhost:8080/api/v1/mangas \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer SEU_TOKEN" \
-  -d '{
-    "titulo": "Solo Leveling",
-    "tipo": "manhwa",
-    "autor": "Geon-goo Kim",
-    "sinopse": "Sung Jin-Woo se torna o caçador mais poderoso",
-    "url_capa": "https://example.com/solo-leveling.jpg"
-  }'
-```
-
-### Criar Gibi (Autenticado)
-
-```bash
-curl -X POST http://localhost:8080/api/v1/mangas \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer SEU_TOKEN" \
-  -d '{
-    "titulo": "Turma da Mônica",
-    "tipo": "gibi",
-    "autor": "Mauricio de Sousa",
-    "editora": "Editora Mauricio de Sousa",
-    "url_capa": "https://example.com/monica.jpg"
-  }'
-```
-
 ### Atualizar Mangá (Autenticado)
 
 ```bash
-curl -X PUT http://localhost:8080/api/v1/mangas/1 \
+curl -X PUT http://localhost:8081/api/v1/mangas/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer SEU_TOKEN" \
   -d '{
@@ -279,45 +225,38 @@ curl -X PUT http://localhost:8080/api/v1/mangas/1 \
 ### Deletar Mangá (Autenticado)
 
 ```bash
-curl -X DELETE http://localhost:8080/api/v1/mangas/1 \
+curl -X DELETE http://localhost:8081/api/v1/mangas/1 \
   -H "Authorization: Bearer SEU_TOKEN"
 ```
 
-## Estrutura do Banco de Dados
+## Estrutura do Dados (JSON)
 
-### Tabela: usuarios
-
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| id | INT | ID único (auto increment) |
-| nome | VARCHAR(100) | Nome do usuário |
-| email | VARCHAR(150) | E-mail (único) |
-| nome_usuario | VARCHAR(50) | Nome de usuário (único) |
-| senha | VARCHAR(64) | Senha (SHA256) |
-
-### Tabela: mangas
+### Arquivo: dados/usuarios.json
 
 | Campo | Tipo | Descrição |
 |-------|------|-----------|
-| id | INT | ID único (auto increment) |
-| titulo | VARCHAR(200) | Título do mangá |
-| tipo | ENUM | manga, manhwa, gibi |
-| autor | VARCHAR(150) | Nome do autor |
-| editora | VARCHAR(150) | Editora (opcional) |
-| sinopse | TEXT | Sinopse (opcional) |
-| ano_lancamento | YEAR | Ano de lançamento |
-| status | ENUM | em_andamento, completo, hiatus, cancelado |
-| volumetoria | VARCHAR(50) | Info de volumes/capítulos |
-| genero | VARCHAR(200) | Gêneros (separados por vírgula) |
-| classificacao_etaria | VARCHAR(20) | L, 10, 12, 16, 18 |
-| url_capa | VARCHAR(500) | URL da imagem de capa |
+| id | int | ID único (auto increment) |
+| nome | string | Nome do usuário |
+| email | string | E-mail (único) |
+| nome_usuario | string | Nome de usuário (único) |
+| senha | string | Senha (SHA256) |
 
-### Tabelas Auxiliares
+### Arquivo: dados/mangas.json
 
-- **autores** - Cadastro detalhado de autores
-- **generos** - Lista de gêneros
-- **manga_generos** - Relacionamento N:N
-- **capitulos** - Capítulos dos mangás
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| id | int | ID único (auto increment) |
+| titulo | string | Título do mangá |
+| tipo | string | manga, manhwa, gibi |
+| autor | string | Nome do autor |
+| editora | string | Editora (opcional) |
+| sinopse | string | Sinopse (opcional) |
+| ano_lancamento | int | Ano de lançamento |
+| status | string | em_andamento, completo, hiatus, cancelado |
+| volumetoria | string | Info de volumes/capítulos |
+| genero | string | Gêneros (separados por vírgula) |
+| classificacao_etaria | string | L, 10, 12, 16, 18 |
+| url_capa | string | URL da imagem de capa |
 
 ## Status Codes
 
