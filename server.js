@@ -419,8 +419,8 @@ const handlers = {
 
 async function handleRequest(req, res) {
   const parsedUrl = url.parse(req.url, true);
-  let path = parsedUrl.pathname.replace(/^\/api\/v1/, '') || '/';
-  path = path.replace(/\/$/, '');
+  let path = parsedUrl.pathname.replace(/^\/api\/v1/, '');
+  path = path.replace(/\/$/, '') || '/';
 
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -445,11 +445,8 @@ async function handleRequest(req, res) {
 
     const result = handlers[route.handler](req, route.params, body);
 
-    if (result.status) {
-      return sendJson(res, result.status, result);
-    }
-
-    return sendJson(res, 200, result);
+    const httpStatus = Number.isInteger(result.status) ? result.status : 200;
+    return sendJson(res, httpStatus, result);
   } catch (err) {
     console.error('Erro:', err);
     return sendJson(res, 500, { mensagem: 'Erro interno do servidor' });

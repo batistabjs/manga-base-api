@@ -25,5 +25,23 @@
     "senha": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
     "created_at": "2024-01-01T00:00:00.000Z",
     "updated_at": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "nome": "Tester Um",
+    "email": "tester1@test.com",
+    "nome_usuario": "tester1",
+    "senha": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "created_at": "2026-10-09T23:02:26.137Z",
+    "updated_at": "2026-10-09T23:02:26.137Z"
+  },
+  {
+    "id": 5,
+    "nome": "Teste API",
+    "email": "teste.api@ex.com",
+    "nome_usuario": "teste_api",
+    "senha": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "created_at": "2026-10-09T23:13:26.204Z",
+    "updated_at": "2026-10-09T23:13:26.204Z"
   }
 ]

@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "titulo": "One Piece",
+    "titulo": "Sem Autor Tipo",
     "tipo": "manga",
     "autor": "Eiichiro Oda",
     "editora": "Shueisha",
@@ -13,7 +13,7 @@
     "classificacao_etaria": "12",
     "url_capa": "https://m.media-amazon.com/images/I/716EGgqzyOL.jpg",
     "created_at": "2024-01-01T00:00:00.000Z",
-    "updated_at": "2024-01-01T00:00:00.000Z"
+    "updated_at": "2026-10-09T23:13:26.358Z"
   },
   {
     "id": 2,
