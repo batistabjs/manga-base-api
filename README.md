@@ -15,12 +15,42 @@ manga-base-api/
 ├── dados/
 │   ├── mangas.json            # Dados dos mangás
 │   └── usuarios.json          # Dados dos usuários
+├── public/                    # TELAS (front-end servido pelo server.js)
+│   ├── css/comum.css          # Design system compartilhado (tokens + componentes)
+│   ├── js/comum.js            # Cliente da API, sessão JWT, menu, modal "Ver detalhes"
+│   ├── index.html|css|js      # Landing page (/)
+│   ├── auth/                  # Autenticação JWT (/auth)
+│   ├── catalogo/              # Catálogo público e busca (/catalogo)
+│   ├── cadastro/              # Cadastro de obra (/cadastro)
+│   ├── editar/                # Edição de obra (/editar?id=N)
+│   └── dashboard/             # Gerenciamento CRUD (/dashboard)
+├── telas/                     # Maquetes de referência (não servidas)
 ├── dados.js                   # Módulo de acesso aos dados
 ├── jwt.js                     # Autenticação JWT
 ├── package.json               # Dependências do projeto
 ├── server.js                  # Ponto de entrada / servidor
 └── README.md                  # Este arquivo
 ```
+
+## Telas (Front-end)
+
+O padrão adotado: **uma pasta por tela em `public/`**, cada uma com três arquivos
+(`index.html`, `<tela>.css`, `<tela>.js`) — HTML, CSS e JavaScript puros, sem frameworks.
+Estilos e componentes compartilhados ficam em `public/css/comum.css` (paleta do
+`telas/.../DESIGN.md`) e utilitários em `public/js/comum.js`.
+
+| Rota | Tela | Endpoints consumidos |
+|------|------|----------------------|
+| `/` | Landing page (hero, vitrine, docs da API) | `GET /mangas`, `GET /mangas/tipo/{tipo}`, `GET /mangas/estatisticas`, `GET /mangas/{id}` |
+| `/auth` | Entrar / criar conta + inspetor de JWT | `POST /auth/login`, `POST /auth/cadastro`, `GET /auth/me` |
+| `/catalogo` | Catálogo público, busca, filtros, ordenação e paginação | `GET /mangas?…`, `GET /mangas/estatisticas`, `GET /mangas/{id}` |
+| `/cadastro` | Cadastro de obra (prévia ao vivo + payload JSON) | `POST /mangas` (Bearer) |
+| `/editar?id=N` | Edição de obra + exclusão confirmada | `GET /mangas/{id}`, `PUT /mangas/{id}`, `DELETE /mangas/{id}` (Bearer) |
+| `/dashboard` | Gerenciamento CRUD completo + terminal de eventos | `GET /auth/me`, `GET /mangas/estatisticas`, `GET/POST/PUT/DELETE /mangas` (Bearer) |
+
+O token JWT retornado por login/cadastro é salvo no `localStorage`
+(`manga_base_token` / `manga_base_usuario`) e injetado automaticamente no header
+`Authorization: Bearer …` por `public/js/comum.js`.
 
 ## Autenticação
 
@@ -94,10 +124,12 @@ Ou para desenvolvimento com auto-reload:
 npm run dev
 ```
 
-### 4. Testar a API
+### 4. Acessar a aplicação
 
 ```
-http://localhost:8081
+http://localhost:8081/            → Landing page
+http://localhost:8081/catalogo    → Catálogo público
+http://localhost:8081/auth        → Login / cadastro de conta
 ```
 
 ## Endpoints da API

@@ -1,0 +1,61 @@
+/* Tela de autenticação JWT (/auth) */
+
+.pagina-auth { padding: 26px 20px 40px; }
+.cabeca-pagina { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.cabeca-pagina a:hover { color: var(--texto); }
+
+.grade-auth { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 22px; align-items: start; }
+@media (max-width: 900px) { .grade-auth { grid-template-columns: 1fr; } }
+
+.painel-forms { position: relative; overflow: hidden; }
+.painel-forms::before {
+  content: ""; position: absolute; top: -80px; right: -80px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: rgba(124, 58, 237, .22); filter: blur(60px); pointer-events: none;
+}
+.cabeca-marca { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; }
+.marca-grande {
+  width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
+  background: var(--primaria); color: #fff; font-weight: 800;
+  display: grid; place-items: center;
+}
+.cabeca-marca h1 { font-size: 20px; margin: 0; }
+.cabeca-marca p { margin: 2px 0 0; font-size: 13px; }
+
+.abas-auth { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 5px; border-radius: 12px; background: var(--fundo-profundo); border: 1px solid var(--borda); margin-bottom: 18px; }
+.aba-auth {
+  padding: 10px 12px; border-radius: 9px; border: 0; cursor: pointer;
+  background: transparent; color: var(--texto-suave);
+  font: inherit; font-size: 14px; font-weight: 600;
+}
+.aba-auth.ativo { background: var(--primaria); color: var(--sobre-primaria); }
+
+.com-olho { position: relative; }
+.com-olho input { padding-right: 42px; }
+.btn-olho {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  border: 0; background: transparent; color: var(--texto-fraco);
+  cursor: pointer; font-size: 15px; padding: 4px 8px; border-radius: 7px;
+}
+.btn-olho:hover { color: var(--texto); }
+
+.btn-largo { width: 100%; height: 44px; font-size: 15px; }
+
+.caixa-seeds { margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--borda); }
+.seeds-auth { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-top: 8px; }
+.seeds-auth button {
+  display: flex; flex-direction: column; gap: 2px; text-align: left;
+  padding: 10px 12px; border-radius: 9px; cursor: pointer;
+  background: var(--painel-baixo); border: 1px solid var(--borda);
+  color: var(--texto-suave); font: inherit; font-size: 12px;
+}
+.seeds-auth button:hover { background: var(--painel-alto); color: var(--texto); }
+.seeds-auth strong { color: var(--primaria-clara); }
+
+.coluna-inspetor { display: flex; flex-direction: column; gap: 18px; }
+.coluna-inspetor h3 { margin: 0 0 8px; font-size: 15px; }
+.coluna-inspetor .btn { margin-top: 6px; }
+
+/* Formulário alternado */
+#form-cadastro { border-top: 1px dashed var(--borda); padding-top: 16px; }
+#form-cadastro.oculto { border-top: 0; padding-top: 0; }

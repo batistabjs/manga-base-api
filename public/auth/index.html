@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manga Base • Autenticação JWT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/comum.css">
+  <link rel="stylesheet" href="/auth/auth.css">
+</head>
+<body data-pagina="auth">
+  <header id="topo" class="topo"></header>
+
+  <main class="container pagina-auth">
+    <div class="cabeca-pagina">
+      <a href="/catalogo" class="dim">◂ Voltar ao catálogo</a>
+      <span class="etiqueta etiqueta-status"><span class="ponto ponto-pulsa cor-ok"></span> Acesso seguro</span>
+    </div>
+
+    <div class="aviso-caixa info oculto" id="aviso-sessao"></div>
+
+    <div class="grade-auth">
+      <!-- Coluna esquerda: formulários -->
+      <div class="cartao painel-forms">
+        <div class="cabeca-marca">
+          <span class="marca-grande">MB</span>
+          <div>
+            <h1>Manga Base • Auth</h1>
+            <p class="dim">Acesse sua conta ou crie um novo cadastro. O token JWT fica salvo neste navegador.</p>
+          </div>
+        </div>
+
+        <div class="abas-auth">
+          <button class="aba-auth ativo" id="btn-tab-entrada" type="button">Entrar na conta</button>
+          <button class="aba-auth" id="btn-tab-cadastro" type="button">Criar novo cadastro</button>
+        </div>
+
+        <!-- LOGIN: POST /api/v1/auth/login -->
+        <form id="form-entrada" novalidate>
+          <div class="campo">
+            <label class="rotulo" for="login-email">E-mail</label>
+            <input id="login-email" type="email" placeholder="admin@mangabase.com" autocomplete="username">
+            <span class="erro-texto" data-erro="email"></span>
+          </div>
+          <div class="campo">
+            <label class="rotulo" for="login-senha">Senha</label>
+            <div class="com-olho">
+              <input id="login-senha" type="password" placeholder="••••••" autocomplete="current-password">
+              <button class="btn-olho" type="button" data-alternar="login-senha" title="Mostrar/ocultar senha">👁</button>
+            </div>
+            <span class="erro-texto" data-erro="senha"></span>
+          </div>
+          <button class="btn btn-primario btn-largo" type="submit">Entrar no sistema</button>
+
+          <div class="caixa-seeds">
+            <span class="rotulo">Contas seed de teste (1 clique) — senha 123456</span>
+            <div class="seeds-auth">
+              <button type="button" data-seed='{"email":"admin@mangabase.com","senha":"123456"}'><strong>Admin</strong><span class="mono">admin@mangabase.com</span></button>
+              <button type="button" data-seed='{"email":"carlos@mangabase.com","senha":"123456"}'><strong>Carlos Manga</strong><span class="mono">carlos@mangabase.com</span></button>
+              <button type="button" data-seed='{"email":"maria@mangabase.com","senha":"123456"}'><strong>Maria Leitora</strong><span class="mono">maria@mangabase.com</span></button>
+            </div>
+          </div>
+        </form>
+
+        <!-- CADASTRO: POST /api/v1/auth/cadastro -->
+        <form id="form-cadastro" class="oculto" novalidate>
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="cad-nome">Nome completo</label>
+              <input id="cad-nome" type="text" placeholder="Renato Silva">
+              <span class="erro-texto" data-erro="nome"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="cad-usuario">Nome de usuário</label>
+              <input id="cad-usuario" type="text" placeholder="renato_reader">
+              <span class="erro-texto" data-erro="nome_usuario"></span>
+            </div>
+          </div>
+          <div class="campo">
+            <label class="rotulo" for="cad-email">E-mail</label>
+            <input id="cad-email" type="email" placeholder="renato@mangabase.com">
+            <span class="erro-texto" data-erro="email"></span>
+          </div>
+          <div class="campo">
+            <label class="rotulo" for="cad-senha">Senha (mínimo 6 caracteres)</label>
+            <div class="com-olho">
+              <input id="cad-senha" type="password" placeholder="••••••" autocomplete="new-password">
+              <button class="btn-olho" type="button" data-alternar="cad-senha" title="Mostrar/ocultar senha">👁</button>
+            </div>
+            <span class="erro-texto" data-erro="senha"></span>
+          </div>
+          <button class="btn btn-primario btn-largo" type="submit">Cadastrar conta</button>
+        </form>
+      </div>
+
+      <!-- Coluna direita: informações da conta -->
+      <div class="coluna-inspetor">
+        <div class="cartao cartao-baixo">
+          <h3>Como funciona</h3>
+          <p class="dim">
+            <span class="mono">POST /api/v1/auth/login</span> e <span class="mono">POST /api/v1/auth/cadastro</span>
+            devolvem um <strong>token_gerado</strong> (HS256, expiração de 1h). Ele é enviado no cabeçalho
+            <span class="mono">Authorization: Bearer &lt;token&gt;</span> em <span class="mono">POST/PUT/DELETE /api/v1/mangas</span>.
+            Use <span class="mono">GET /api/v1/auth/me</span> para validar a sessão.
+          </p>
+        </div>
+        <div class="cartao cartao-baixo">
+          <h3>Gerenciar sessão</h3>
+          <p class="dim">Após entrar, você é levado ao dashboard. Para sair, use o botão <strong>Sair</strong> no menu superior — ele remove o token deste navegador.</p>
+          <a class="btn btn-primario" href="/dashboard">Ir para o dashboard →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="rodape" class="rodape"></footer>
+
+  <script src="/js/comum.js"></script>
+  <script src="/auth/auth.js"></script>
+</body>
+</html>

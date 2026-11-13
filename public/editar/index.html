@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editar obra — Manga Base</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/comum.css">
+  <link rel="stylesheet" href="/editar/editar.css">
+</head>
+<body data-pagina="editar">
+  <header id="topo" class="topo"></header>
+
+  <main class="container pagina-editar">
+    <div class="cabeca-pagina">
+      <div>
+        <span class="sobre-titulo">PUT /api/v1/mangas/{id} · requer Bearer JWT</span>
+        <h1>Edição de obra</h1>
+      </div>
+      <div class="seletor-obra">
+        <label class="rotulo" for="seletor-obra">Alterar para:</label>
+        <select id="seletor-obra"><option value="">Carregando acervo…</option></select>
+      </div>
+    </div>
+
+    <div id="avisos"></div>
+
+    <div class="grade-editar">
+      <!-- Formulário -->
+      <div class="cartao">
+        <h2>Dados da obra <span class="mono dim" id="rotulo-id"></span></h2>
+        <div id="conteudo-edicao" class="oculto">
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="titulo">Título *</label>
+              <input id="titulo" type="text" maxlength="200">
+              <span class="erro-texto" data-erro="titulo"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="tipo">Tipo *</label>
+              <select id="tipo">
+                <option value="manga">Mangá (Japão)</option>
+                <option value="manhwa">Manhwa (Coréia)</option>
+                <option value="gibi">Gibi (Brasil)</option>
+              </select>
+              <span class="erro-texto" data-erro="tipo"></span>
+            </div>
+          </div>
+
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="status">Status de publicação *</label>
+              <select id="status">
+                <option value="em_andamento">Em andamento</option>
+                <option value="completo">Completo</option>
+                <option value="hiatus">Hiatus temporário</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+              <span class="erro-texto" data-erro="status"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="autor">Autor / Roteiro *</label>
+              <input id="autor" type="text" maxlength="150">
+              <span class="erro-texto" data-erro="autor"></span>
+            </div>
+          </div>
+
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="editora">Editora / Licenciante</label>
+              <input id="editora" type="text" maxlength="150">
+              <span class="erro-texto" data-erro="editora"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="genero">Gêneros (separados por vírgula)</label>
+              <input id="genero" type="text" placeholder="ex: Ação, Fantasia">
+            </div>
+          </div>
+
+          <div class="campo">
+            <label class="rotulo" for="sinopse">Sinopse da obra</label>
+            <textarea id="sinopse" rows="4"></textarea>
+            <span class="erro-texto" data-erro="sinopse"></span>
+          </div>
+
+          <div class="grade-3">
+            <div class="campo">
+              <label class="rotulo" for="ano_lancamento">Ano de lançamento</label>
+              <input id="ano_lancamento" type="number" min="1900">
+              <span class="erro-texto" data-erro="ano_lancamento"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="volumetria">Volumetria</label>
+              <input id="volumetria" type="text" placeholder="ex: 179 capítulos">
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="classificacao_etaria">Classificação indicativa</label>
+              <select id="classificacao_etaria">
+                <option value="">—</option>
+                <option value="L">Livre</option>
+                <option value="10">10+</option>
+                <option value="12">12+</option>
+                <option value="16">16+</option>
+                <option value="18">18+</option>
+              </select>
+              <span class="erro-texto" data-erro="classificacao_etaria"></span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label class="rotulo" for="url_capa">URL da capa</label>
+            <input id="url_capa" type="url" placeholder="https://…/capa.jpg">
+            <span class="erro-texto" data-erro="url_capa"></span>
+          </div>
+        </div>
+        <p class="dim" id="mensagem-vazia">Selecione uma obra no seletor acima para carregar seus dados.</p>
+      </div>
+
+      <!-- Coluna lateral: preview + auditoria + perigo -->
+      <div class="coluna-lateral">
+        <div class="cartao">
+          <h3>Prévia da capa atual</h3>
+          <div class="previa-capa" id="previa-capa"><span class="capa-fallback">?</span></div>
+        </div>
+        <div class="cartao cartao-baixo">
+          <h3>Auditoria &amp; histórico</h3>
+          <dl class="auditoria">
+            <div><dt>Criada em</dt><dd class="mono" id="auditoria-criada">—</dd></div>
+            <div><dt>Última edição</dt><dd class="mono" id="auditoria-editada">—</dd></div>
+            <div><dt>ID do registro</dt><dd class="mono" id="auditoria-id">—</dd></div>
+          </dl>
+        </div>
+        <div class="cartao cartao-perigo">
+          <h3>Excluir obra permanentemente</h3>
+          <p class="dim">Dispara <span class="mono">DELETE /api/v1/mangas/{id}</span>. A ação não pode ser desfeita.</p>
+          <button class="btn btn-perigo" id="btn-abrir-excluir" type="button" disabled>Excluir obra</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de ações persistente -->
+    <div class="cartao barra-acoes">
+      <div class="estado-alteracoes">
+        <span class="ponto ponto-pulsa cor-alerta"></span>
+        <div>
+          <strong id="rotulo-alteracoes">Alterações não salvas</strong>
+          <span class="dim"> — salve para atualizar as informações da obra</span>
+        </div>
+      </div>
+      <div class="linha-acoes">
+        <button class="btn" id="btn-descartar" type="button" disabled>↺ Descartar</button>
+        <button class="btn" id="btn-abrir-excluir-2" type="button" disabled>Excluir</button>
+        <button class="btn btn-primario" id="btn-salvar" type="button" disabled>💾 Salvar alterações</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal de exclusão com confirmação digitada -->
+  <div class="modal-fundo oculto" id="modal-excluir">
+    <div class="modal modal-pequeno">
+      <div class="modal-cabecalho">
+        <strong class="cor-erro">Confirmar exclusão de obra</strong>
+        <button class="btn btn-mini" type="button" id="btn-fechar-excluir">✕</button>
+      </div>
+      <div class="modal-corpo">
+        <p>Você está prestes a disparar <span class="mono aviso-mono">DELETE /api/v1/mangas/<span id="excluir-id"></span></span>.</p>
+        <div class="aviso-caixa erro" id="excluir-resumo"></div>
+        <p class="dim">Para confirmar a destruição permanente do registro, digite <strong class="mono">DELETE <span class="texto-id"></span></strong> abaixo:</p>
+        <input class="campo-confirmacao mono" id="input-confirmar-exclusao" type="text" placeholder="DELETE …" autocomplete="off">
+        <span class="erro-texto" id="erro-exclusao"></span>
+      </div>
+      <div class="modal-rodape">
+        <button class="btn" type="button" id="btn-cancelar-excluir">Cancelar</button>
+        <button class="btn btn-perigo" type="button" id="btn-confirmar-excluir" disabled>Confirmar exclusão</button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="rodape" class="rodape"></footer>
+
+  <script src="/js/comum.js"></script>
+  <script src="/editar/editar.js"></script>
+</body>
+</html>

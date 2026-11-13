@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manga Base — Sua base central de Mangás, Manhwas e Gibis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/comum.css">
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body data-pagina="inicio">
+  <header id="topo" class="topo"></header>
+
+  <main>
+    <!-- SEÇÃO 1: HERO -->
+    <section class="hero">
+      <div class="container">
+        <h1>Sua base central de <span class="gradiente">Mangás, Manhwas e Gibis</span></h1>
+        <p class="hero-sub">
+          Consulte, cadastre e gerencie quadrinhos de todos os estilos com a API RESTful
+          mais completa e rápida do ecossistema. Autenticação JWT, filtros e estatísticas em JSON puro.
+        </p>
+        <form class="hero-busca" id="form-busca-vitrine">
+          <input id="busca-vitrine" type="text" autocomplete="off"
+                 placeholder="Buscar por título, autor ou gênero (ex: One Piece, Naruto, Turma da Mônica)…">
+          <button class="btn btn-primario" type="submit">Pesquisar</button>
+        </form>
+        <div class="hero-acoes">
+          <a class="btn btn-primario" href="/catalogo">Explorar catálogo público</a>
+          <a class="btn btn-borda" href="/auth">Cadastrar minha conta / Acessar API</a>
+        </div>
+        <div class="hero-contadores" id="hero-contadores">
+          <div class="contador"><strong>—</strong><span>Obras cadastradas</span></div>
+          <div class="contador"><strong>—</strong><span>Mangás (Japão)</span></div>
+          <div class="contador"><strong>—</strong><span>Manhwas (Coréia)</span></div>
+          <div class="contador"><strong>—</strong><span>Gibis (Brasil)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: VITRINE / DESTAQUES -->
+    <section class="vitrine" id="vitrine">
+      <div class="container">
+        <div class="vitrine-cabeca">
+          <div>
+            <span class="sobre-titulo">Ecossistema global de leituras</span>
+            <h2>Destaques do catálogo</h2>
+            <p class="dim">Dados servidos em tempo real por <span class="mono">GET /api/v1/mangas</span> e por tipo em <span class="mono">GET /api/v1/mangas/tipo/{tipo}</span>.</p>
+          </div>
+          <div class="abas" id="abas-catalogo">
+            <button class="aba ativo" data-tipo="all" type="button">Todas as obras</button>
+            <button class="aba" data-tipo="manga" type="button">Mangás</button>
+            <button class="aba" data-tipo="manhwa" type="button">Manhwas</button>
+            <button class="aba" data-tipo="gibi" type="button">Gibis</button>
+          </div>
+        </div>
+        <div class="grade-obras" id="grade-destaques"></div>
+        <p class="dim vitrine-vazio" id="vitrine-vazio" hidden>Nenhuma obra encontrada nesta categoria.</p>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: DOCUMENTAÇÃO RÁPIDA DA API -->
+    <section class="docs" id="documentacao">
+      <div class="container">
+        <div class="docs-cabeca">
+          <span class="sobre-titulo">Engenharia RESTful aberta</span>
+          <h2>Endpoints da API &amp; autenticação JWT</h2>
+          <p class="dim">Integre seu leitor, app mobile ou bot com a base localhost:8081. Todas as rotas abaixo estão ativas neste servidor.</p>
+        </div>
+
+        <div class="docs-grade">
+          <div class="docs-coluna">
+            <div class="cartao docs-bloco">
+              <h3>Endpoints públicos <span class="mono dim">(sem token)</span></h3>
+              <ul class="lista-endpoints">
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas</span><em>catálogo paginado</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/{id}</span><em>detalhes por ID</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/tipo/{tipo}</span><em>manga | manhwa | gibi</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/status/{status}</span><em>filtro de status</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/genero/{genero}</span><em>filtro por gênero</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/ano/{ano}</span><em>filtro por ano</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/buscar?q={termo}</span><em>busca textual</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/mangas/estatisticas</span><em>contadores</em></li>
+              </ul>
+            </div>
+            <div class="cartao docs-bloco">
+              <h3>Operações autenticadas <span class="mono dim">(Bearer JWT)</span></h3>
+              <p class="dim">Envie o cabeçalho <span class="mono">Authorization: Bearer &lt;token&gt;</span>.</p>
+              <ul class="lista-endpoints">
+                <li><span class="metodo metodo-post">POST</span><span class="mono">/api/v1/auth/cadastro</span><em>criar conta + token</em></li>
+                <li><span class="metodo metodo-post">POST</span><span class="mono">/api/v1/auth/login</span><em>obter token</em></li>
+                <li><span class="metodo metodo-get">GET</span><span class="mono">/api/v1/auth/me</span><em>dados do usuário</em></li>
+                <li><span class="metodo metodo-post">POST</span><span class="mono">/api/v1/mangas</span><em>criar obra</em></li>
+                <li><span class="metodo metodo-put">PUT</span><span class="mono">/api/v1/mangas/{id}</span><em>editar obra</em></li>
+                <li><span class="metodo metodo-delete">DEL</span><span class="mono">/api/v1/mangas/{id}</span><em>excluir obra</em></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="docs-coluna">
+            <div class="terminal">
+              <div class="terminal-cabecalho">
+                <span class="mono dim">auth_fetch_example</span>
+                <div class="abas-code">
+                  <button class="aba-code ativo" data-snippet="curl" type="button">cURL</button>
+                  <button class="aba-code" data-snippet="fetch" type="button">JavaScript Fetch</button>
+                </div>
+              </div>
+              <pre class="terminal-corpo mono" id="snippet-curl">curl -X POST http://localhost:8081/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@mangabase.com", "senha": "123456"}'
+
+# 2. Consultar o catálogo com o token recebido:
+curl -X GET http://localhost:8081/api/v1/mangas \
+  -H "Authorization: Bearer SEU_TOKEN_AQUI"</pre>
+              <pre class="terminal-corpo mono oculto" id="snippet-fetch">// 1. Login e obtenção do token
+const resposta = await fetch('http://localhost:8081/api/v1/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email: 'admin@mangabase.com', senha: '123456' })
+});
+const { token_gerado } = await resposta.json();
+
+// 2. Leitura com Bearer Token
+const mangas = await fetch('http://localhost:8081/api/v1/mangas', {
+  headers: { Authorization: `Bearer ${token_gerado}` }
+}).then((r) => r.json());
+console.log(mangas);</pre>
+            </div>
+            <button class="btn btn-borda" id="btn-copiar-snippet" type="button">Copiar snippet exibido</button>
+
+            <div class="cartao docs-bloco">
+              <h3>Contas seed de teste</h3>
+              <p class="dim">Senha padrão: <span class="mono">123456</span> — use na tela <a href="/auth">de autenticação</a>.</p>
+              <div class="seeds">
+                <div><strong class="cor-ok">ADMIN</strong><span class="mono">admin@mangabase.com</span></div>
+                <div><strong class="cor-info">CURADOR</strong><span class="mono">carlos@mangabase.com</span></div>
+                <div><strong>LEITOR</strong><span class="mono">maria@mangabase.com</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="rodape" class="rodape"></footer>
+
+  <script src="/js/comum.js"></script>
+  <script src="/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+/* Cadastro de obra (/cadastro) */
+
+.pagina-cadastro { padding: 26px 20px 40px; }
+.cabeca-pagina { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.cabeca-pagina h1 { margin: 4px 0 0; font-size: 24px; }
+
+.grade-cadastro { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px; align-items: start; }
+@media (max-width: 980px) { .grade-cadastro { grid-template-columns: 1fr; } }
+
+.coluna-form h2 { font-size: 17px; margin-bottom: 14px; }
+.coluna-lateral { display: flex; flex-direction: column; gap: 18px; }
+.coluna-lateral h2 { font-size: 16px; margin: 0 0 12px; }
+.coluna-lateral .cabeca-json h2 { margin: 0; font-size: 14.5px; }
+
+.grade-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.grade-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+@media (max-width: 640px) { .grade-2, .grade-3 { grid-template-columns: 1fr; } }
+
+/* Prévia da capa (estilo cartão do catálogo) */
+.previa-capa { display: flex; gap: 14px; align-items: center; background: var(--painel-baixo); border-radius: 12px; padding: 12px; }
+.previa-imagem {
+  position: relative; width: 110px; height: 146px; flex-shrink: 0;
+  border-radius: 10px; overflow: hidden;
+  background: linear-gradient(135deg, var(--painel-alto), var(--primaria-suave));
+}
+.previa-imagem img { width: 100%; height: 100%; object-fit: cover; }
+.previa-dados { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.previa-datos strong { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.previa-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.previa-meta .mono { background: var(--painel-alto); border-radius: 6px; padding: 2px 7px; font-size: 11px; }
+
+.dicas { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+
+/* Barra de ações fixa embaixo */
+.barra-acoes { margin-top: 20px; }
+.linha-acoes { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+#resultado-envio { margin-bottom: 12px; }

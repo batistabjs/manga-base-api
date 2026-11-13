@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastrar obra — Manga Base</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/comum.css">
+  <link rel="stylesheet" href="/cadastro/cadastro.css">
+</head>
+<body data-pagina="cadastro">
+  <header id="topo" class="topo"></header>
+
+  <main class="container pagina-cadastro">
+    <div class="cabeca-pagina">
+      <div>
+        <h1>Cadastrar nova obra</h1>
+      </div>
+      <a class="btn btn-mini btn-borda" href="/dashboard">Ver dashboard →</a>
+    </div>
+
+    <form id="form-obra" novalidate>
+      <div class="grade-cadastro">
+        <!-- Coluna esquerda: dados da obra -->
+        <div class="cartao coluna-form">
+          <h2>Dados da obra</h2>
+
+          <div class="campo">
+            <label class="rotulo" for="titulo">Título *</label>
+            <input id="titulo" type="text" maxlength="200" placeholder="ex: One Piece">
+            <span class="erro-texto" data-erro="titulo"></span>
+          </div>
+
+          <div class="campo">
+            <span class="rotulo">Tipo *</span>
+            <div class="chips" id="seletor-tipo">
+              <button type="button" class="chip ativo" data-tipo-opcao="manga">Mangá (Japão)</button>
+              <button type="button" class="chip" data-tipo-opcao="manhwa">Manhwa (Coréia)</button>
+              <button type="button" class="chip" data-tipo-opcao="gibi">Gibi (Brasil)</button>
+            </div>
+            <input id="tipo" type="hidden" value="manga">
+            <span class="erro-texto" data-erro="tipo"></span>
+          </div>
+
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="autor">Autor *</label>
+              <input id="autor" type="text" maxlength="150" placeholder="ex: Eiichiro Oda">
+              <span class="erro-texto" data-erro="autor"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="editora">Editora</label>
+              <input id="editora" type="text" maxlength="150" placeholder="ex: Shueisha">
+              <span class="erro-texto" data-erro="editora"></span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label class="rotulo" for="sinopse">Sinopse <span class="dim mono" id="contador-sinopse">0 / 5000</span></label>
+            <textarea id="sinopse" rows="5" maxlength="5000" placeholder="Resumo da obra exibido nos cartões do catálogo…"></textarea>
+            <span class="erro-texto" data-erro="sinopse"></span>
+          </div>
+
+          <div class="grade-3">
+            <div class="campo">
+              <label class="rotulo" for="ano_lancamento">Ano de lançamento</label>
+              <input id="ano_lancamento" type="number" min="1900" placeholder="ex: 1997">
+              <span class="erro-texto" data-erro="ano_lancamento"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="volumetria">Volumetria</label>
+              <input id="volumetria" type="text" placeholder="ex: 107+ volumes">
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="classificacao_etaria">Classificação etária</label>
+              <select id="classificacao_etaria">
+                <option value="">—</option>
+                <option value="L">Livre</option>
+                <option value="10">10+</option>
+                <option value="12">12+</option>
+                <option value="16">16+</option>
+                <option value="18">18+</option>
+              </select>
+              <span class="erro-texto" data-erro="classificacao_etaria"></span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <span class="rotulo">Gêneros (vão como texto livre no campo <span class="mono">genero</span>)</span>
+            <div class="chips" id="chips-generos">
+              <button type="button" class="chip" data-genero="Ação">Ação</button>
+              <button type="button" class="chip" data-genero="Aventura">Aventura</button>
+              <button type="button" class="chip" data-genero="Fantasia">Fantasia</button>
+              <button type="button" class="chip" data-genero="Comédia">Comédia</button>
+              <button type="button" class="chip" data-genero="Drama">Drama</button>
+              <button type="button" class="chip" data-genero="Horror">Horror</button>
+              <button type="button" class="chip" data-genero="Shonen">Shonen</button>
+              <button type="button" class="chip" data-genero="Slice of Life">Slice of Life</button>
+            </div>
+          </div>
+
+          <div class="campo">
+            <span class="rotulo">Status de publicação *</span>
+            <div class="chips" id="seletor-status">
+              <button type="button" class="chip ativo" data-status-opcao="em_andamento"><span class="ponto ponto-pulsa cor-ok" style="background:currentColor"></span> Em andamento</button>
+              <button type="button" class="chip" data-status-opcao="completo"><span class="ponto cor-info" style="background:currentColor"></span> Completo</button>
+              <button type="button" class="chip" data-status-opcao="hiatus"><span class="ponto cor-alerta" style="background:currentColor"></span> Hiatus</button>
+              <button type="button" class="chip" data-status-opcao="cancelado"><span class="ponto cor-erro" style="background:currentColor"></span> Cancelado</button>
+            </div>
+            <input id="status" type="hidden" value="em_andamento">
+            <span class="erro-texto" data-erro="status"></span>
+          </div>
+        </div>
+
+        <!-- Coluna direita: capa + payload -->
+        <div class="coluna-lateral">
+          <div class="cartao">
+            <h2>Capa da obra</h2>
+            <div class="campo">
+              <label class="rotulo" for="url_capa">URL da capa remota</label>
+              <input id="url_capa" type="url" placeholder="https://…/capa.jpg">
+              <span class="erro-texto" data-erro="url_capa"></span>
+            </div>
+            <div class="previa-capa">
+              <div class="previa-imagem" id="previa-imagem"><span class="capa-fallback">?</span></div>
+              <div class="previa-dados">
+                <span class="etiqueta etiqueta-manga" id="previa-tipo">MANGÁ</span>
+                <span class="mono dim" id="previa-status"><span class="ponto ponto-pulsa cor-ok" style="background:currentColor"></span> Em andamento</span>
+                <strong id="previa-titulo">Sem título</strong>
+                <span class="dim" id="previa-autor">Autor desconhecido</span>
+                <div class="previa-meta">
+                  <span class="mono" id="previa-ano">—</span>
+                  <span class="mono" id="previa-vol">—</span>
+                  <span class="mono" id="previa-classificacao">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cartao cartao-baixo">
+            <h3>Dicas de cadastro</h3>
+            <ul class="dicas dim">
+              <li><strong>Título canônico:</strong> use a grafia oficial no Brasil ou a transliteração mais aceita.</li>
+              <li><strong>Capa:</strong> prefira imagens 3:4 (mín. 600×800px) para nitidez nos cartões.</li>
+              <li><strong>Gêneros:</strong> facilite a descoberta escolhendo os gêneros principais.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de ações -->
+      <div class="cartao barra-acoes">
+        <div class="aviso-caixa oculto" id="resultado-envio"></div>
+        <div class="linha-acoes">
+          <button class="btn" type="button" id="btn-seed">Preencher exemplo</button>
+          <button class="btn" type="button" id="btn-validar">Validar localmente</button>
+          <button class="btn" type="button" id="btn-limpar">Limpar</button>
+          <button class="btn btn-primario" type="submit" id="btn-enviar">＋ Cadastrar obra</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <footer id="rodape" class="rodape"></footer>
+
+  <script src="/js/comum.js"></script>
+  <script src="/cadastro/cadastro.js"></script>
+</body>
+</html>

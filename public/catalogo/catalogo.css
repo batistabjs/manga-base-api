@@ -1,0 +1,68 @@
+/* Catálogo público (/catalogo) */
+
+.cabeca-busca {
+  padding: 34px 0 26px;
+  background:
+    radial-gradient(560px 260px at 12% -20%, rgba(124, 58, 237, .22), transparent 70%),
+    radial-gradient(460px 240px at 90% 10%, rgba(87, 27, 193, .18), transparent 70%),
+    var(--painel-baixo);
+  border-bottom: 1px solid var(--borda);
+}
+.linha-meta { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.linha-meta h1 { font-size: 24px; margin-bottom: 4px; }
+.contador-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border-radius: 999px;
+  background: var(--painel-alto); border: 1px solid var(--borda); font-size: 13px;
+}
+
+.barra-busca {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px; border-radius: 14px;
+  background: var(--fundo-profundo); border: 1px solid var(--borda); box-shadow: var(--sombra);
+}
+.barra-busca input { flex: 1; min-width: 0; padding: 10px 14px; border: 0; border-radius: 9px; background: transparent; color: var(--texto); font: inherit; outline: none; }
+
+.trilho-tipos { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.rotulo-trilho { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+
+.grade-catalogo { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start; padding-top: 26px; }
+@media (max-width: 900px) { .grade-catalogo { grid-template-columns: 1fr; } }
+
+.painel-filtros { position: sticky; top: 76px; display: flex; flex-direction: column; gap: 16px; }
+.cabeca-filtros { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cabeca-filtros h2 { margin: 0; font-size: 16px; }
+.link-reset { border: 0; background: none; color: var(--texto-fraco); font: inherit; font-size: 13px; cursor: pointer; }
+.link-reset:hover { color: var(--primaria-clara); }
+
+.grupo-filtro { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px dashed var(--borda); }
+.opcao-radio {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 9px; cursor: pointer;
+  background: var(--painel-baixo); font-size: 13.5px;
+}
+.opcao-radio:hover { background: var(--painel-alto); }
+.opcao-radio input { accent-color: var(--primaria); }
+.opcao-radio .ponto { flex-shrink: 0; }
+.opcao-radio span:nth-child(2) { flex: 1; display: inline-flex; align-items: center; gap: 7px; }
+
+.coluna-resultados { display: flex; flex-direction: column; gap: 18px; }
+.barra-resultados { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; }
+.barra-resultados h2 { margin: 0; font-size: 18px; }
+.ordenacao { display: flex; align-items: center; gap: 8px; }
+.ordenacao select {
+  padding: 8px 12px; border-radius: 9px;
+  background: var(--painel-alto); color: var(--texto);
+  border: 1px solid var(--borda); font: inherit; font-size: 13.5px;
+}
+
+.vazio { text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; padding: 36px 20px; }
+
+.paginacao { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 12px 18px; }
+.lado-paginacao { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lado-paginacao select { padding: 6px 10px; border-radius: 8px; background: var(--painel-alto); color: var(--texto); border: 1px solid var(--borda); font: inherit; font-size: 13px; }
+.botoes-paginacao { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.numeros-pagina { display: flex; gap: 6px; flex-wrap: wrap; }
+.numeros-pagina .btn { min-width: 34px; }
+.numeros-pagina .btn.ativo { background: var(--primaria); color: var(--sobre-primaria); }
+.ellipsis { color: var(--texto-fraco); padding: 0 2px; }

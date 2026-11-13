@@ -1,10 +1,63 @@
 const http = require('http');
 const url = require('url');
+const fs = require('fs');
+const path = require('path');
 const jwt = require('./jwt');
 const dados = require('./dados');
 const crypto = require('crypto');
 
 const PORT = 8081;
+
+/* =========================================================
+   TELAS (front-end estático em /public)
+   Cada tela tem index.html + <tela>.css + <tela>.js e consome
+   os endpoints REST abaixo (/api/v1/...).
+   ========================================================= */
+const DIRETORIO_PUBLICO = path.join(__dirname, 'public');
+const ROTAS_PAGINAS = {
+  '/': 'index.html',          // Landing page
+  '/auth': 'auth/index.html', // Autenticação JWT (login/cadastro)
+  '/catalogo': 'catalogo/index.html', // Catálogo público e busca
+  '/cadastro': 'cadastro/index.html', // Cadastro de obra (POST /mangas)
+  '/editar': 'editar/index.html',     // Edição de obra (PUT/DELETE /mangas/{id})
+  '/dashboard': 'dashboard/index.html', // Gerenciamento CRUD
+};
+const TIPOS_MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain; charset=utf-8',
+};
+
+function servirArquivoEstatico(req, res, caminhoUrl) {
+  let relativo = ROTAS_PAGINAS[caminhoUrl] || decodeURIComponent(caminhoUrl).replace(/^\/+/, '');
+  if (!relativo) relativo = 'index.html';
+  else if (!ROTAS_PAGINAS[caminhoUrl] && !path.extname(relativo)) relativo += '/index.html';
+
+  const caminhoCompleto = path.normalize(path.join(DIRETORIO_PUBLICO, relativo));
+  if (!caminhoCompleto.startsWith(DIRETORIO_PUBLICO)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('Acesso negado');
+  }
+
+  fs.readFile(caminhoCompleto, (erro, conteudo) => {
+    if (erro) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end(`Tela não encontrada: /${relativo}`);
+    }
+    const tipo = TIPOS_MIME[path.extname(caminhoCompleto).toLowerCase()] || 'application/octet-stream';
+    res.writeHead(200, { 'Content-Type': tipo });
+    res.end(req.method === 'HEAD' ? undefined : conteudo);
+  });
+}
 
 const TIPOS_PERMITIDOS = ['manga', 'manhwa', 'gibi'];
 const STATUS_PERMITIDOS = ['em_andamento', 'completo', 'hiatus', 'cancelado'];
@@ -430,6 +483,11 @@ async function handleRequest(req, res) {
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     return res.end();
+  }
+
+  // Telas e assets estáticos (tudo que não é /api)
+  if ((req.method === 'GET' || req.method === 'HEAD') && !parsedUrl.pathname.startsWith('/api')) {
+    return servirArquivoEstatico(req, res, parsedUrl.pathname);
   }
 
   const route = matchRoute(req.method, path);

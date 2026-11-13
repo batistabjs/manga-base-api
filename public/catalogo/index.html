@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo público — Manga Base</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/comum.css">
+  <link rel="stylesheet" href="/catalogo/catalogo.css">
+</head>
+<body data-pagina="catalogo">
+  <header id="topo" class="topo"></header>
+
+  <main>
+    <!-- Cabeçalho de busca -->
+    <section class="cabeca-busca">
+      <div class="container">
+        <div class="linha-meta">
+          <div><h1>Explorador de obras</h1><p class="dim">Catálogo público servido por <span class="mono">GET /api/v1/mangas</span> (paginação, filtros e ordenação no servidor).</p></div>
+          <span class="contador-pill"><span class="mono"><strong id="total-indexados">—</strong></span> títulos indexados</span>
+        </div>
+
+        <div class="barra-busca">
+          <input id="campo-busca" type="text" autocomplete="off"
+                 placeholder="Pesquisar por título, autor ou sinopse (parâmetro ?busca= da API)…">
+          <button class="btn btn-mini oculto" id="btn-limpar-busca" type="button" title="Limpar pesquisa">✕</button>
+          <button class="btn btn-primario" id="btn-filtrar" type="button">Filtrar acervo</button>
+        </div>
+
+        <div class="trilho-tipos" id="trilho-tipos">
+          <span class="dim rotulo-trilho">Origem:</span>
+          <button class="chip ativo" data-tipo="all" type="button">TODOS (<span data-conta-tipo="all">—</span>)</button>
+          <button class="chip" data-tipo="manga" type="button">MANGÁ · JAPÃO (<span data-conta-tipo="manga">—</span>)</button>
+          <button class="chip" data-tipo="manhwa" type="button">MANHWA · CORÉIA (<span data-conta-tipo="manhwa">—</span>)</button>
+          <button class="chip" data-tipo="gibi" type="button">GIBI · BRASIL (<span data-conta-tipo="gibi">—</span>)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grade com filtros e resultados -->
+    <section class="container grade-catalogo">
+      <aside class="cartao painel-filtros">
+        <div class="cabeca-filtros">
+          <h2>Filtros avançados</h2>
+          <button class="link-reset" id="btn-resetar" type="button">Resetar</button>
+        </div>
+
+        <div class="grupo-filtro">
+          <span class="rotulo">Status da obra (GET /api/v1/mangas?status=)</span>
+          <div id="grupo-status">
+            <label class="opcao-radio"><input type="radio" name="status" value="all" checked><span>Todos os status</span><span class="mono dim" data-conta-status="all">—</span></label>
+            <label class="opcao-radio"><input type="radio" name="status" value="em_andamento"><span><span class="ponto cor-ok" style="background:currentColor"></span> Em andamento</span><span class="mono dim" data-conta-status="em_andamento">—</span></label>
+            <label class="opcao-radio"><input type="radio" name="status" value="completo"><span><span class="ponto cor-info" style="background:currentColor"></span> Completo</span><span class="mono dim" data-conta-status="completo">—</span></label>
+            <label class="opcao-radio"><input type="radio" name="status" value="hiatus"><span><span class="ponto cor-alerta" style="background:currentColor"></span> Em hiatus</span><span class="mono dim" data-conta-status="hiatus">—</span></label>
+            <label class="opcao-radio"><input type="radio" name="status" value="cancelado"><span><span class="ponto cor-erro" style="background:currentColor"></span> Cancelado</span><span class="mono dim" data-conta-status="cancelado">—</span></label>
+          </div>
+        </div>
+
+        <div class="grupo-filtro">
+          <span class="rotulo">Gêneros temáticos <span class="dim">(filtro na página atual)</span></span>
+          <div class="chips" id="chips-generos">
+            <button class="chip" data-genero="Ação" type="button">Ação</button>
+            <button class="chip" data-genero="Aventura" type="button">Aventura</button>
+            <button class="chip" data-genero="Fantasia" type="button">Fantasia</button>
+            <button class="chip" data-genero="Comédia" type="button">Comédia</button>
+            <button class="chip" data-genero="Drama" type="button">Drama</button>
+            <button class="chip" data-genero="Horror" type="button">Horror</button>
+            <button class="chip" data-genero="Shonen" type="button">Shonen</button>
+            <button class="chip" data-genero="Slice of Life" type="button">Slice of Life</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="coluna-resultados">
+        <div class="cartao barra-resultados">
+          <div>
+            <h2>Catálogo de quadrinhos</h2>
+            <span class="dim" id="rotulo-resultados">Carregando…</span>
+          </div>
+          <div class="ordenacao">
+            <label class="rotulo" for="ordenacao">Ordenar:</label>
+            <select id="ordenacao">
+              <option value="id-asc">ID (crescente)</option>
+              <option value="id-desc">ID (decrescente)</option>
+              <option value="titulo-asc">Título (A → Z)</option>
+              <option value="titulo-desc">Título (Z → A)</option>
+              <option value="ano_lancamento-desc">Ano (recentes)</option>
+              <option value="ano_lancamento-asc">Ano (antigos)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grade-obras" id="grade-obras"></div>
+
+        <div class="cartao vazio" id="banner-vazio" hidden>
+          <h3>Nenhuma obra corresponde aos critérios</h3>
+          <p class="dim">Tente remover alguns filtros ou buscar por termos mais genéricos como "Ação", "Oda" ou "Turma".</p>
+          <button class="btn btn-primario" id="btn-limpar-vazio" type="button">Limpar todos os filtros</button>
+        </div>
+
+        <div class="cartao paginacao" id="painel-paginacao">
+          <div class="lado-paginacao">
+            <label class="rotulo" for="tamanho-pagina">Itens por página:</label>
+            <select id="tamanho-pagina">
+              <option value="6" selected>6</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+            <span class="mono dim">Página <strong id="pagina-atual">1</strong> de <strong id="total-paginas">1</strong></span>
+          </div>
+          <div class="botoes-paginacao">
+            <button class="btn btn-mini" id="btn-anterior" type="button">◂ Anterior</button>
+            <div class="numeros-pagina" id="numeros-pagina"></div>
+            <button class="btn btn-mini" id="btn-proximo" type="button">Próxima ▸</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="rodape" class="rodape"></footer>
+
+  <script src="/js/comum.js"></script>
+  <script src="/catalogo/catalogo.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+/* Edição de obra (/editar) */
+
+.pagina-editar { padding: 26px 20px 40px; }
+.cabeca-pagina { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+.cabeca-pagina h1 { margin: 4px 0 0; font-size: 24px; }
+.seletor-obra { display: flex; align-items: center; gap: 10px; }
+.seletor-obra select { min-width: 260px; max-width: 380px; padding: 9px 12px; border-radius: 9px; background: var(--painel-alto); color: var(--texto); border: 1px solid var(--borda); font: inherit; }
+
+.grade-editar { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px; align-items: start; }
+@media (max-width: 980px) { .grade-editar { grid-template-columns: 1fr; } }
+
+.grade-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.grade-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+@media (max-width: 640px) { .grade-2, .grade-3 { grid-template-columns: 1fr; } }
+
+.coluna-lateral { display: flex; flex-direction: column; gap: 18px; }
+.coluna-lateral h3 { font-size: 15px; margin: 0 0 10px; }
+
+.previa-capa {
+  position: relative; width: 100%; max-width: 240px; aspect-ratio: 3 / 4;
+  border-radius: 11px; overflow: hidden;
+  background: linear-gradient(135deg, var(--painel-alto), var(--primaria-suave));
+}
+.previa-capa img { width: 100%; height: 100%; object-fit: cover; }
+
+.auditoria { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.auditoria div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 13.5px; }
+.auditoria dt { color: var(--texto-fraco); }
+.auditoria dd { margin: 0; }
+
+.cartao-perigo { border-color: rgba(244, 63, 94, .35); }
+
+.barra-acoes {
+  margin-top: 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  position: sticky; bottom: 12px; z-index: 10; box-shadow: var(--sombra);
+}
+.estado-alteracoes { display: flex; align-items: center; gap: 10px; }
+.linha-acoes { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Modal de exclusão */
+.modal-pequeno { max-width: 480px; }
+.aviso-mono { background: var(--erro-fundo); padding: 2px 7px; border-radius: 6px; }
+.texto-id { color: var(--erro); }
+.campo-confirmacao {
+  width: 100%; padding: 10px 12px; border-radius: 9px;
+  border: 1px solid var(--borda); background: var(--fundo-profundo);
+  color: var(--texto); outline: none;
+}
+.campo-confirmacao:focus { border-color: var(--erro); box-shadow: 0 0 0 3px var(--erro-fundo); }

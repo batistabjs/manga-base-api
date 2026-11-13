@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard CRUD — Manga Base</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/comum.css">
+  <link rel="stylesheet" href="/dashboard/dashboard.css">
+</head>
+<body data-pagina="dashboard">
+  <header id="topo" class="topo"></header>
+
+  <main class="container pagina-dashboard">
+    <div id="conteudo" hidden>
+      <!-- Usuário autenticado -->
+      <div class="cabeca-dash">
+        <div>
+          <span class="sobre-titulo">Gerenciamento CRUD autenticado</span>
+          <h1>Dashboard de obras</h1>
+        </div>
+        <div class="cartao usuario-cartao">
+          <span class="marca-grande">MB</span>
+          <div>
+            <strong id="usuario-nome">—</strong>
+            <span class="dim mono" id="usuario-email">—</span>
+          </div>
+          <button class="btn btn-mini" id="btn-atualizar-usuario" type="button" title="Recarregar GET /auth/me">↻</button>
+        </div>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="grade-stats" id="grade-stats"></div>
+
+      <!-- Ferramentas -->
+      <div class="cartao barra-ferramentas">
+        <input id="filtro-busca" type="text" placeholder="Filtrar por título, autor, editora…" autocomplete="off">
+        <select id="filtro-tipo">
+          <option value="">Todos os tipos</option>
+          <option value="manga">Mangá</option>
+          <option value="manhwa">Manhwa</option>
+          <option value="gibi">Gibi</option>
+        </select>
+        <select id="filtro-status">
+          <option value="">Todos os status</option>
+          <option value="em_andamento">Em andamento</option>
+          <option value="completo">Completo</option>
+          <option value="hiatus">Hiatus</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+        <button class="btn" id="btn-atualizar" type="button">↻ Atualizar</button>
+        <button class="btn btn-primario" id="btn-nova-obra" type="button">＋ Cadastrar obra</button>
+        <a class="btn btn-borda" href="/cadastro">Formulário completo →</a>
+      </div>
+
+      <!-- Tabela -->
+      <div class="rolagem-tabela">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>ID</th><th>Obra</th><th>Tipo</th><th>Autor</th><th>Editora</th>
+              <th>Ano</th><th>Status</th><th>Atualizada</th><th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="corpo-tabela"></tbody>
+        </table>
+      </div>
+      <p class="dim" id="rotulo-tabela">—</p>
+
+      <!-- Terminal de eventos -->
+      <div class="terminal">
+        <div class="terminal-cabecalho">
+          <span class="mono dim">terminal_de_eventos_da_sessao</span>
+          <button class="btn btn-mini" id="btn-limpar-logs" type="button">Limpar logs</button>
+        </div>
+        <div class="terminal-corpo" id="logs">
+          <span class="dim mono">Nenhum evento registrado nesta sessão.</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal criar/editar obra -->
+  <div class="modal-fundo oculto" id="modal-obra">
+    <div class="modal">
+      <div class="modal-cabecalho">
+        <div>
+          <strong id="modal-titulo">Nova obra</strong>
+          <span class="mono dim" id="modal-metodo">POST /api/v1/mangas</span>
+        </div>
+        <button class="btn btn-mini" type="button" id="btn-fechar-modal">✕</button>
+      </div>
+      <form id="form-modal" novalidate>
+        <div class="modal-corpo">
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="m-titulo">Título *</label>
+              <input id="m-titulo" type="text" maxlength="200">
+              <span class="erro-texto" data-erro="titulo"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="m-tipo">Tipo *</label>
+              <select id="m-tipo">
+                <option value="manga">Mangá</option>
+                <option value="manhwa">Manhwa</option>
+                <option value="gibi">Gibi</option>
+              </select>
+              <span class="erro-texto" data-erro="tipo"></span>
+            </div>
+          </div>
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="m-autor">Autor *</label>
+              <input id="m-autor" type="text" maxlength="150">
+              <span class="erro-texto" data-erro="autor"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="m-editora">Editora</label>
+              <input id="m-editora" type="text" maxlength="150">
+              <span class="erro-texto" data-erro="editora"></span>
+            </div>
+          </div>
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="m-status">Status *</label>
+              <select id="m-status">
+                <option value="em_andamento">Em andamento</option>
+                <option value="completo">Completo</option>
+                <option value="hiatus">Hiatus</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+              <span class="erro-texto" data-erro="status"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="m-classificacao">Classificação etária</label>
+              <select id="m-classificacao">
+                <option value="">—</option>
+                <option value="L">Livre</option>
+                <option value="10">10+</option>
+                <option value="12">12+</option>
+                <option value="16">16+</option>
+                <option value="18">18+</option>
+              </select>
+              <span class="erro-texto" data-erro="classificacao_etaria"></span>
+            </div>
+          </div>
+          <div class="grade-2">
+            <div class="campo">
+              <label class="rotulo" for="m-ano">Ano</label>
+              <input id="m-ano" type="number" min="1900">
+              <span class="erro-texto" data-erro="ano_lancamento"></span>
+            </div>
+            <div class="campo">
+              <label class="rotulo" for="m-volumetria">Volumetria</label>
+              <input id="m-volumetria" type="text">
+            </div>
+          </div>
+          <div class="campo">
+            <label class="rotulo" for="m-genero">Gêneros (vírgula)</label>
+            <input id="m-genero" type="text" placeholder="ex: Ação, Aventura">
+          </div>
+          <div class="campo">
+            <label class="rotulo" for="m-capa">URL da capa</label>
+            <input id="m-capa" type="url">
+            <span class="erro-texto" data-erro="url_capa"></span>
+          </div>
+          <div class="campo">
+            <label class="rotulo" for="m-sinopse">Sinopse</label>
+            <textarea id="m-sinopse" rows="3"></textarea>
+            <span class="erro-texto" data-erro="sinopse"></span>
+          </div>
+          <div class="aviso-caixa erro oculto" id="modal-erro-geral"></div>
+        </div>
+        <div class="modal-rodape">
+          <button class="btn" type="button" id="btn-cancelar-modal">Cancelar</button>
+          <button class="btn btn-primario" type="submit" id="btn-enviar-modal">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer id="rodape" class="rodape"></footer>
+
+  <script src="/js/comum.js"></script>
+  <script src="/dashboard/dashboard.js"></script>
+</body>
+</html>
